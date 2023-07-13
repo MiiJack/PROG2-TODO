@@ -17,7 +17,7 @@ public class Show {
             // Execute the SQL query and retrieve the result set
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Iterate over the result set and display each todo
+            /* Iterate over the result set and display each todo */
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
