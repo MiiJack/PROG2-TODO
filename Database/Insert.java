@@ -1,9 +1,6 @@
 package Database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class Insert {
     private boolean isDoneSuccessfully = false;
@@ -36,6 +33,41 @@ public class Insert {
             statement.setTimestamp(3,deadline);
             statement.setInt(4,priority);
             statement.setBoolean(5,done);
+            int update = statement.executeUpdate();
+            this.isDoneSuccessfully = update > 0;
+        } catch (SQLException e){
+            if(e.toString().length() > 0){
+                this.error = e.toString();
+            }
+            e.getStackTrace();
+        }
+    }
+    /**
+     * add a new row to the TODO
+     * @param title set the title of the TODO
+     * @param description set the description of the TODO
+     * @param deadline set the deadline of the TODO
+     * @param priority set the Priority of the TODO. It should be between 0 and 10
+     */
+    public Insert(
+            String title,
+            String description,
+            Timestamp deadline,
+            int priority
+    ) {
+        try {
+            Connection connection = new ConnectionDB().getConnection();
+            String sql = """
+            INSERT INTO todo
+            (title,description,deadline,priority,done)
+            VALUES (?,?,?,?,?);
+            """;
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,title);
+            statement.setString(2,description);
+            statement.setTimestamp(3,deadline);
+            statement.setInt(4,priority);
+            statement.setBoolean(5,false);
             int update = statement.executeUpdate();
             this.isDoneSuccessfully = update > 0;
         } catch (SQLException e){
